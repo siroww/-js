@@ -1,9 +1,14 @@
 // ЗАДАНИЕ 6: Функция every(array, callback)
 // Проверяет, удовлетворяют ли ВСЕ элементы условию
+// Проверяет все
 
+/**
+ * @param {Array} array - Массив элементов
+ * @param {Function} callback - Функция обратного вызова, принимающая (element, index, array)
+ */
 function every(array, callback) {
     for (let i = 0; i < array.length; i++) {
-        if (!callback(array[i], i, array)) { // элемент, индекс, массив
+        if (!callback(array[i], i, array)) {
             return false;
         }
     }
@@ -14,8 +19,7 @@ const evenNumbers = [2, 4, 6, 8];
 
 console.log("--- (6.1) Все ли четные? ---");
 const allEven = every(evenNumbers, (num) => num % 2 === 0);
-console.log("Array:", evenNumbers);
-console.log("All even:", allEven); // true
+console.log("All even:", allEven);
 
 console.log("\n--- (6.2) Все четные (с нечетным) ---");
 const mixed = [2, 4, 6, 7];

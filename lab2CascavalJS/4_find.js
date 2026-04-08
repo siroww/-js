@@ -1,6 +1,11 @@
 // ЗАДАНИЕ 4: Функция find(array, callback)
 // Возвращает первый элемент, удовлетворяющий условию (или undefined)
 
+// Находит элемент
+/**
+ * @param {Array} array - Массив элементов
+ * @param {Function} callback - Функция обратного вызова, принимающая (element, index, array)
+ */
 function find(array, callback) {
     for (let i = 0; i < array.length; i++) {
         if (callback(array[i], i, array)) { // элемент, индекс, массив

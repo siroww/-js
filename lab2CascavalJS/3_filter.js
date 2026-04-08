@@ -1,6 +1,11 @@
 // ЗАДАНИЕ 3: Функция filter(array, callback)
 // Фильтрует массив, оставляя только элементы, для которых callback вернул true
 
+// Фильтрует массив
+/**
+ * @param {Array} array - Массив элементов
+ * @param {Function} callback - Функция обратного вызова, принимающая (element, index, array)
+ */
 function filter(array, callback) {
     const result = [];
     for (let i = 0; i < array.length; i++) {

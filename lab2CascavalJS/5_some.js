@@ -1,6 +1,11 @@
 // ЗАДАНИЕ 5: Функция some(array, callback)
 // Проверяет, есть ли хотя бы один элемент, удовлетворяющий условию
 
+// Ищет условие
+/**
+ * @param {Array} array - Массив элементов
+ * @param {Function} callback - Функция обратного вызова, принимающая (element, index, array)
+ */
 function some(array, callback) {
     for (let i = 0; i < array.length; i++) {
         if (callback(array[i], i, array)) { // элемент, индекс, массив
@@ -17,7 +22,7 @@ const hasEven = some(numbers, (num) => num % 2 === 0);
 console.log("Array:", numbers);
 console.log("Has even:", hasEven); // true
 
-console.log("\n--- (5.2) Все нечетные? ---");
+console.log("\n--- (5.2) Все четные? ---");
 const oddNumbers = [1, 3, 5, 7, 9];
 const hasEvenInOdd = some(oddNumbers, (num) => num % 2 === 0);
 console.log("Array:", oddNumbers);

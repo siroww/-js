@@ -1,6 +1,11 @@
 // ЗАДАНИЕ 2: Функция map(array, callback)
 // Создает новый массив, содержащий результаты вызова callback для каждого элемента
 
+// Создает массив
+/**
+ * @param {Array} array - Массив элементов
+ * @param {Function} callback - Функция обратного вызова, принимающая (element, index, array)
+ */
 function map(array, callback) {
     const result = [];
     for (let i = 0; i < array.length; i++) {

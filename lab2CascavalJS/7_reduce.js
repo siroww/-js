@@ -1,26 +1,22 @@
 // ЗАДАНИЕ 7 (дополнительно): Функция reduce(array, callback, initialValue)
 // Накапливает результат в аккумуляторе, проходя по всем элементам
+// Накопитель результата
 
+/**
+ * @param {Array} array - Массив элементов
+ * @param {Function} callback - Функция обратного вызова, принимающая (accumulator, element, index, array)
+ * @param {*} [initialValue] - Начальное значение аккумулятора (опционально)
+ */
 function reduce(array, callback, initialValue) {
-    let accumulator;
-    let startIndex = 0;
-    
-    if (arguments.length < 3) {
-        if (array.length === 0) {
-            return undefined;
-        }
-        accumulator = array[0];
-        startIndex = 1;
-    } else {
-        accumulator = initialValue;
+    let acc = arguments.length < 3 ? array[0] : initialValue;
+    let start = arguments.length < 3 ? 1 : 0;
+
+    for (let i = start; i < array.length; i++) {
+        acc = callback(acc, array[i], i, array);
     }
-    
-    for (let i = startIndex; i < array.length; i++) {
-        accumulator = callback(accumulator, array[i], i, array); // acc, элемент, индекс, массив
-    }
-    
-    return accumulator;
+    return acc;
 }
+
 
 const numbers = [1, 2, 3, 4, 5];
 

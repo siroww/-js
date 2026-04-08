@@ -1,3 +1,8 @@
+// Перебор массива
+/**
+ * @param {Array} array - Массив элементов
+ * @param {Function} callback - Функция обратного вызова, принимающая (element, index, array)
+ */
 function forEach(array, callback) {
     for (let i = 0; i < array.length; i++) {
         callback(array[i], i, array); //элемент, индекс, массив
@@ -5,12 +10,18 @@ function forEach(array, callback) {
 }
 
 
+/**
+ * @param {Array} array - Массив элементов для печати
+ */
 function printArray(array) {
     forEach(array, (val, i) => {
         console.log(`Element ${i}: value ${val}`);
     });
 }
 
+/**
+ * @param {Array} array - Массив элементов для печати
+ */
 function printArray1(array) {
     forEach(array, (val, i) => {
         console.log(`${i}: ${val}`);
