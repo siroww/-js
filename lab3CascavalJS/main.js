@@ -91,25 +91,37 @@ function parseTransactionDate(dateString) {
 //уникальные типы транзакций
 /*
  * Возвращает массив уникальных типов транзакций.
+ * Set (Множество) - это коллекция, которая хранит только уникальные значения.
+ * При создании Set из массива автоматически удаляются дубликаты.
+ * Array.from() преобразует Set обратно в массив.
  * @param {Transaction[]} transactions
  * @returns {string[]} Уникальные значения transaction_type.
  */
 function getUniqueTransactionTypes(transactions) {
+  // Set - встроенный объект JavaScript, который хранит уникальные значения любого типа
+  // При добавлении дубликатов, Set оставляет только первое значение
   return Array.from(new Set(transactions.map((t) => t.transaction_type.toLowerCase())));
 }
 
 /**
  * Вычисляет сумму всех транзакций.
+ * reduce() - метод массива, который преобразует массив в одно значение.
+ * Он принимает аккумулятор (sum) и текущий элемент, возвращая новое значение аккумулятора.
  * @param {Transaction[]} transactions
  * @returns {number} Сумма всех transaction_amount.
  */
 function calculateTotalAmount(transactions) {
+  // reduce(callback, initialValue) - выполняет функцию для каждого элемента массива
+  // sum - аккумулятор, который накапливает результат
+  // transaction - текущий обрабатываемый элемент
   return transactions.reduce((sum, transaction) => sum + transaction.transaction_amount, 0);
 }
 
 /**
  * Вычисляет сумму транзакций по заданной дате, месяцу и/или году.
  * Если параметр не указан, он не учитывается в фильтрации.
+ * filter() - метод массива, который создаёт новый массив с элементами,
+ * прошедшими проверку (вернувшими true в callback-функции).
  * @param {Transaction[]} transactions
  * @param {number} [year]
  * @param {number} [month] Месяц 1-12.
@@ -118,6 +130,7 @@ function calculateTotalAmount(transactions) {
  */
 function calculateTotalAmountByDate(transactions, year, month, day) {
   return transactions
+    // filter() - отбирает только те элементы, для которых функция возвращает true
     .filter((transaction) => {
       const date = parseTransactionDate(transaction.transaction_date);
       if (year != null && date.getFullYear() !== Number(year)) return false;
@@ -125,22 +138,27 @@ function calculateTotalAmountByDate(transactions, year, month, day) {
       if (day != null && date.getDate() !== Number(day)) return false;
       return true;
     })
+    // reduce() - накапливает сумму отфильтрованных транзакций
     .reduce((sum, transaction) => sum + transaction.transaction_amount, 0);
 }
 
 /**
  * Возвращает транзакции указанного типа.
+ * filter() - создаёт новый массив со всеми элементами, прошедшими проверку
  * @param {Transaction[]} transactions
  * @param {string} type
  * @returns {Transaction[]}
  */
 function getTransactionByType(transactions, type) {
   const typeLower = type.toLowerCase();
+  // filter() возвращает новый массив, содержащий только те элементы,
+  // для которых callback-функция вернула true
   return transactions.filter((transaction) => transaction.transaction_type.toLowerCase() === typeLower);
 }
 
 /**
  * Возвращает транзакции в указанном диапазоне дат включительно.
+ * filter() - отбирает транзакции, даты которых попадают в диапазон
  * @param {Transaction[]} transactions
  * @param {string} startDate Дата начала в формате YYYY-MM-DD.
  * @param {string} endDate Дата конца в формате YYYY-MM-DD.
@@ -157,6 +175,7 @@ function getTransactionsInDateRange(transactions, startDate, endDate) {
 
 /**
  * Возвращает транзакции по названию магазина/сервиса.
+ * filter() - фильтрует массив по названию merchant_name
  * @param {Transaction[]} transactions
  * @param {string} merchantName
  * @returns {Transaction[]}
@@ -178,6 +197,7 @@ function calculateAverageTransactionAmount(transactions) {
 
 /**
  * Возвращает транзакции с суммой в заданном диапазоне.
+ * filter() - отбирает транзакции, сумма которых в пределах min-max
  * @param {Transaction[]} transactions
  * @param {number} minAmount
  * @param {number} maxAmount
@@ -191,10 +211,12 @@ function getTransactionsByAmountRange(transactions, minAmount, maxAmount) {
 
 /**
  * Вычисляет общую сумму дебетовых транзакций.
+ * reduce() - сворачивает массив транзакций в одно число (сумму)
  * @param {Transaction[]} transactions
  * @returns {number}
  */
 function calculateTotalDebitAmount(transactions) {
+  // Сначала filter() отбирает дебетовые транзакции, затем reduce() суммирует их
   return getTransactionByType(transactions, "debit").reduce((sum, transaction) => sum + transaction.transaction_amount, 0);
 }
 
@@ -223,10 +245,12 @@ function getMonthName(monthIndex) {
 
 /**
  * Находит месяц с наибольшим количеством транзакций.
+ * reduce() - создаёт объект с подсчётом транзакций по месяцам
  * @param {Transaction[]} transactions
  * @returns {string} Название месяца.
  */
 function findMostTransactionsMonth(transactions) {
+  // reduce() преобразует массив транзакций в объект {номер_месяца: количество}
   const counts = transactions.reduce((acc, transaction) => {
     const month = parseTransactionDate(transaction.transaction_date).getMonth();
     acc[month] = (acc[month] || 0) + 1;
@@ -247,6 +271,7 @@ function findMostTransactionsMonth(transactions) {
 
 /**
  * Находит месяц с наибольшим количеством дебетовых транзакций.
+ * reduce() - аналогично считает транзакции, но только дебетовые
  * @param {Transaction[]} transactions
  * @returns {string}
  */
@@ -286,6 +311,7 @@ function mostTransactionTypes(transactions) {
 
 /**
  * Возвращает транзакции до указанной даты (исключая саму дату).
+ * filter() - отбирает транзакции, которые были раньше указанной даты
  * @param {Transaction[]} transactions
  * @param {string} date Дата в формате YYYY-MM-DD.
  * @returns {Transaction[]}
@@ -297,20 +323,28 @@ function getTransactionsBeforeDate(transactions, date) {
 
 /**
  * Находит транзакцию по ее уникальному идентификатору.
+ * find() - метод массива, который возвращает ПЕРВЫЙ элемент,
+ * прошедший проверку. Возвращает undefined, если ничего не найдено.
  * @param {Transaction[]} transactions
  * @param {string|number} id
  * @returns {Transaction|undefined}
  */
 function findTransactionById(transactions, id) {
+  // find() ищет первый элемент, для которого callback вернёт true
   return transactions.find((transaction) => transaction.transaction_id === id);
 }
 
 /**
  * Возвращает массив только описаний транзакций.
+ * map() - метод массива, который создаёт НОВЫЙ массив с результатами
+ * вызова функции для каждого элемента исходного массива.
+ * transform каждый элемент в другое значение.
  * @param {Transaction[]} transactions
  * @returns {string[]}
  */
 function mapTransactionDescriptions(transactions) {
+  // map() преобразует каждый объект транзакции в строку (описание)
+  // Результат - новый массив той же длины, но с другими значениями
   return transactions.map((transaction) => transaction.transaction_description);
 }
 
